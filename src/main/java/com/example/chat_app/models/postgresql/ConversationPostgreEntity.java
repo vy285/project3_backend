@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class ConversationPostgreEntity {
     @Id
     @Column(name = "con_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String conId;
 
     @Column(name = "name_con")

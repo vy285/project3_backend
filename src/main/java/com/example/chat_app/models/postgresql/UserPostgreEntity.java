@@ -1,10 +1,7 @@
 package com.example.chat_app.models.postgresql;
 
 import com.example.chat_app.utils.UserStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,10 +12,11 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class UserPostgreEntity {
     @Id
     @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
     @Column(name = "user_code")
@@ -45,6 +43,6 @@ public class UserPostgreEntity {
     @Column(name = "created_at")
     private Long createdAt;
 
-    @Column(name = "apdated_at")
+    @Column(name = "updated_at")
     private Long updatedAt;
 }

@@ -12,12 +12,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "account", indexes = {
         @Index(name = "userId" , columnList = "user_id")
 })
-public class AccountPostgreEntity {
+public class    AccountPostgreEntity {
     @Id
     @Column(name="user_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
-    @Column(name="gmail")
+    @Column(name="gmail", unique = true)
     private String gmail;
 
     @Column(name="password")
