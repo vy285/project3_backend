@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class ReferralPostgreEntity {
     @Id
     @Column(name = "referral_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long referralId;
 
     @Column(name = "sender_id")

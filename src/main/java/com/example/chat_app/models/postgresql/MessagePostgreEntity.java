@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class MessagePostgreEntity {
     @Id
     @Column(name = "mess_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long messId;
 
     @Column(name = "con_id")

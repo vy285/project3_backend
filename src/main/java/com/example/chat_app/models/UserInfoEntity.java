@@ -10,12 +10,8 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserEntity {
+public class UserInfoEntity {
     Long userId;
-
-    String userCode;
-
-    String gmail;
 
     String avatar;
 

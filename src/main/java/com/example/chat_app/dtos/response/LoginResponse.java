@@ -7,7 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ResponseDto<T> {
-    public Integer code;
-    public T data;
+public class LoginResponse {
+    String token;
 }

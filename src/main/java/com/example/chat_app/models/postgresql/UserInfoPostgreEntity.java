@@ -1,29 +1,21 @@
 package com.example.chat_app.models.postgresql;
 
-import com.example.chat_app.utils.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
+import org.hibernate.annotations.ColumnDefault;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-public class UserPostgreEntity {
+@Table(name = "user_info")
+public class UserInfoPostgreEntity {
     @Id
     @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-
-    @Column(name = "user_code")
-    private String userCode;
-
-    @Column(name = "gmail")
-    private String gmail;
 
     @Column(name = "avatar")
     private String avatar;
@@ -34,7 +26,7 @@ public class UserPostgreEntity {
     @Column(name = "date_of_birth")
     private String dateOfBirth;
 
-    @Column(name = "status")
+    @Column(name = "status", columnDefinition = "varchar(255) default 'offline'")
     private String status;
 
     @Column(name = "address")

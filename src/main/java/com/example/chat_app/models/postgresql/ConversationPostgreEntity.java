@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class ConversationPostgreEntity {
     @Id
     @Column(name = "con_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private String conId;
 
     @Column(name = "name_con")
@@ -32,7 +31,6 @@ public class ConversationPostgreEntity {
     private Long updatedAt;
 
     private String genConId(Long userIdFirst, Long userIdSecond) {
-        return String.format("%s-%s", userIdFirst, userIdSecond);
+        return userIdFirst < userIdSecond ? String.format("%s-%s", userIdFirst, userIdSecond) : String.format("%s-%s", userIdSecond, userIdFirst);
     }
-
 }

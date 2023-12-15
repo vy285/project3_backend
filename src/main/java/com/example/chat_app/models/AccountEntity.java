@@ -22,6 +22,10 @@ public class AccountEntity implements UserDetails {
 
     Long updatedAt;
 
+    String verifyCode;
+
+    boolean enable;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -49,6 +53,6 @@ public class AccountEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enable;
     }
 }

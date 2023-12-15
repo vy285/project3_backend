@@ -8,4 +8,8 @@ public interface AccountDao {
     public Optional<AccountEntity> getByUserId(Long userId);
 
     public Optional<AccountEntity> getByGmail(String gmail);
+
+    public Integer updatePassword(String password, Long updatedAt, Long userId);
+
+    public AccountEntity saveEntity(AccountEntity accountEntity);
 }

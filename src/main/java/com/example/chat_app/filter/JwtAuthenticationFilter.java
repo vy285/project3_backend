@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String userId = tokenProvider.getUserIdFromJWT(jwt);
                 AccountEntity accountEntity = accountService.loadUserByUsername(userId);
                 if(accountEntity != null) {
-                    System.out.println("check thanh cong");
+                    System.out.println("Id cua user: " + accountEntity.getUserId());
                     UsernamePasswordAuthenticationToken
                             authentication = new UsernamePasswordAuthenticationToken(accountEntity, null, accountEntity.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

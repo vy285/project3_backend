@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Data
 @AllArgsConstructor
@@ -12,10 +13,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "account", indexes = {
         @Index(name = "userId" , columnList = "user_id")
 })
-public class    AccountPostgreEntity {
+public class AccountPostgreEntity {
     @Id
     @Column(name="user_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @Column(name="gmail", unique = true)
@@ -29,4 +30,11 @@ public class    AccountPostgreEntity {
 
     @Column(name="updated_at")
     private Long updatedAt;
+
+    @Column(name = "verify_code")
+    private String verifyCode;
+
+    @Column(name = "enable")
+    @ColumnDefault("false")
+    private boolean enable;
 }
