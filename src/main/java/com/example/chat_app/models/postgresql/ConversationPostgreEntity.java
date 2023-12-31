@@ -18,11 +18,11 @@ public class ConversationPostgreEntity {
     @Column(name = "name_con")
     private String nameCon;
 
-    @Column(name = "user_id_first")
-    private Long userIdFirst;
+    @Column(name = "user_id_send_referral")
+    private Long userIdSendReferral;
 
-    @Column(name = "user_id_second")
-    private Long userIdSecond;
+    @Column(name = "user_id_receive_referral")
+    private Long userIdReceiveReferral;
 
     @Column(name = "created_at")
     private Long createdAt;
@@ -30,7 +30,7 @@ public class ConversationPostgreEntity {
     @Column(name = "updated_at")
     private Long updatedAt;
 
-    private String genConId(Long userIdFirst, Long userIdSecond) {
-        return userIdFirst < userIdSecond ? String.format("%s-%s", userIdFirst, userIdSecond) : String.format("%s-%s", userIdSecond, userIdFirst);
+    private String genConId(Long userIdSendReferral, Long userIdReceiveReferral) {
+        return userIdSendReferral < userIdReceiveReferral ? String.format("%s-%s", userIdSendReferral, userIdReceiveReferral) : String.format("%s-%s", userIdReceiveReferral, userIdSendReferral);
     }
 }

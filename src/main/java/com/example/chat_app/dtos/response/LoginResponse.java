@@ -8,5 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class LoginResponse {
+    Long userId;
+
     String token;
 }

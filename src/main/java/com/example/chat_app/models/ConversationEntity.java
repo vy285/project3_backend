@@ -12,15 +12,15 @@ public class ConversationEntity {
 
     String nameCon;
 
-    Long userIdFirst;
+    Long userIdSendReferral; // ai gửi lời kết bạn thì người đó là userId
 
-    Long userIdSecond;
+    Long userIdReceiveReferral; // ai g
 
     Long createdAt;
 
     Long updatedAt;
 
-    private String genConId(Long userIdFirst, Long userIdSecond) {
-        return String.format("%s-%s", userIdFirst, userIdSecond);
+    public static String genConId(Long userIdSendReferral, Long userIdReceiveReferral) {
+        return userIdSendReferral < userIdReceiveReferral ? String.format("%s-%s", userIdSendReferral, userIdReceiveReferral) : String.format("%s-%s", userIdReceiveReferral, userIdSendReferral);
     }
 }

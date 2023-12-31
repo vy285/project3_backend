@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class ReferralEntity {
     Long referralId;
 
@@ -20,4 +19,8 @@ public class ReferralEntity {
     Long createdAt;
 
     Long updatedAt;
+
+    public ReferralEntity() {
+        this.status = ReferralStatus.WAIT;
+    }
 }

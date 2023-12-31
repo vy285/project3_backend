@@ -1,9 +1,9 @@
 package com.example.chat_app.utils;
 
 public enum UserStatus {
-    OFFLINE("online"),
+    OFFLINE("OFFLINE"),
 
-    ONLINE("offline");
+    ONLINE("ONLINE");
 
     private final String text;
 

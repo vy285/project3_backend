@@ -5,10 +5,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "referral")
 public class ReferralPostgreEntity {
@@ -24,6 +24,7 @@ public class ReferralPostgreEntity {
     private Long receiverId;
 
     @Column(name = "status")
+    @ColumnDefault(value = "wait") // neu A chua gui loi ket ban toi B thi se khong co data referral
     private String status;
 
     @Column(name = "created_at")
@@ -31,4 +32,8 @@ public class ReferralPostgreEntity {
 
     @Column(name = "updated_at")
     private Long updatedAt;
+
+    public ReferralPostgreEntity() {
+        this.status = "wait";
+    }
 }

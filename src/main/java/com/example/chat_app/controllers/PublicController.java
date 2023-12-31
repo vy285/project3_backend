@@ -4,15 +4,20 @@ import com.example.chat_app.dtos.request.AccountRequest;
 import com.example.chat_app.dtos.request.SignupRequest;
 import com.example.chat_app.dtos.request.VerifyCodeRequest;
 import com.example.chat_app.dtos.response.LoginResponse;
+import com.example.chat_app.dtos.response.PageResponseDto;
 import com.example.chat_app.dtos.response.ResponseDto;
 import com.example.chat_app.filter.JwtTokenProvider;
 import com.example.chat_app.models.AccountEntity;
+import com.example.chat_app.models.UserInfoEntity;
 import com.example.chat_app.services.AccountService;
 import com.example.chat_app.services.UserInfoService;
 import com.example.chat_app.utils.UserStatus;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -54,6 +59,7 @@ public class PublicController {
         if (request.getPassword().equals(entity.getPassword())) {
             String jwtToken = new JwtTokenProvider().generateToken(entity);
             LoginResponse response = new LoginResponse();
+            response.setUserId(entity.getUserId());
             response.setToken(jwtToken);
             userInfoService.changeStatus(UserStatus.ONLINE, entity.getUserId());
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, response));
@@ -87,5 +93,15 @@ public class PublicController {
         log.info("VerifyCode");
         accountService.saveVerifyCode(request.getGmail());
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Create verifyCode successfully"));
+    }
+
+    @GetMapping("/searchUser")
+    public ResponseEntity<PageResponseDto<UserInfoEntity>> getUserInfoBy(
+            @RequestParam("nickname") String nickname,
+            @RequestParam(name = "page", defaultValue = "1") @Min(1) int page,
+            @RequestParam(name = "size", defaultValue = "5") @Min(1) @Max(100) int size
+    ) {
+        Page<UserInfoEntity> userInfoEntityPage = userInfoService.getByNickname(nickname, page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(new PageResponseDto<>(200, userInfoEntityPage));
     }
 }

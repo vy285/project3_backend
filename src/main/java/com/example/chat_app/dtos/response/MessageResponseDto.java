@@ -1,4 +1,4 @@
-package com.example.chat_app.models;
+package com.example.chat_app.dtos.response;
 
 import com.example.chat_app.utils.MessageStatus;
 import com.example.chat_app.utils.MessageType;
@@ -7,9 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class MessageEntity {
+@AllArgsConstructor
+public class MessageResponseDto {
     Long messId;
 
     String conId;
@@ -22,12 +22,11 @@ public class MessageEntity {
 
     String content;
 
-    MessageStatus status;
+    String status;
 
-    MessageType type;
+    String type;
 
     Long createdAt;
 
     Long updatedAt;
-
 }

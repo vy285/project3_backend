@@ -51,6 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.error("failed on set user authentication", ex);
         }
         System.out.println("ban da di qua filter");
+//        response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
         filterChain.doFilter(request, response);
     }
 

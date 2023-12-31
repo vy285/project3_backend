@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface UserInfoRepository extends JpaRepository<UserInfoPostgreEntity, Long> {
     @Modifying
@@ -17,4 +19,10 @@ public interface UserInfoRepository extends JpaRepository<UserInfoPostgreEntity,
     @Modifying
     @Query(value = "insert into user_info (user_id, nickname, created_at, updated_at) values (:#{#entity.userId}, :#{#entity.nickname}, :#{#entity.createdAt}, :#{#entity.updatedAt})", nativeQuery = true)
     void insertEntity(UserInfoPostgreEntity entity);
+
+    @Query(value = "select * from user_info where nickname = ?1 and status = 'online'", nativeQuery = true)
+    List<UserInfoPostgreEntity> findBy(String nickname);
+
+    @Query(value = "select count(*) from user_info where nickname = ?1 and status = 'online'", nativeQuery = true)
+    long countBy(String nickname);
 }

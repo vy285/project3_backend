@@ -1,11 +1,23 @@
 package com.example.chat_app.utils;
 
 public enum MessageStatus {
-    WAITING, // tin nhan bi loi chua the gui
+    WAITING("WAITING"), // tin nhan bi loi chua the gui
 
-    DELETED, // thu hoi tin nhan
+    DELETED("DELETED"), // thu hoi tin nhan
 
-    NORMAL, // tin nhan binh thuong
+    NORMAL("NORMAL"), // tin nhan binh thuong
 
-    CHANGED // tin nhan da sua
+    CHANGED("CHANGED"); // tin nhan da sua
+
+    private final String text;
+
+    MessageStatus(final String text) {
+        this.text = text;
+    }
+
+    @Override
+    public String toString() {
+        return text;
+    }
+
 }

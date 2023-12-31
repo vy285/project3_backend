@@ -17,7 +17,7 @@ public class MessagePostgreEntity {
     private Long messId;
 
     @Column(name = "con_id")
-    private Long conId;
+    private String conId;
 
     @Column(name = "sender_id")
     private Long senderId;
