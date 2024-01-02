@@ -19,13 +19,11 @@ public interface AccountRepository extends JpaRepository<AccountPostgreEntity, L
 
     @Modifying
     @Transactional
-    @Query(value = "update account set password = ?1, updated_at = ?2 where user_id = ?3", nativeQuery = true)
-    Integer updatePassword(String password, Long updatedAt, Long userId);
+    @Query(value = "update account set password = :newPass, updated_at = :now where user_id = :userId and password = :oldPass", nativeQuery = true)
+    Integer updatePassword(String oldPass, String newPass, Long now, Long userId);
 
     @Modifying
     @Query(value = "insert into account (gmail, password, created_at, updated_at) values (:#{#entity.gmail}, :#{#entity.password}, :#{#entity.createdAt}, :#{#entity.updatedAt})", nativeQuery = true)
     void insertEntity(AccountPostgreEntity entity);
 
-//    @Modifying
-//    @Query(value = "")
 }

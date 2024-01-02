@@ -31,15 +31,13 @@ public class ReferralService {
     }
 
     @Transactional
-    public void acceptReferral(Long senderId, Long receiverId, String nicknameFriend) {
+    public void acceptReferral(Long senderId, Long receiverId) {
         int countUpdate = referralDao.updateStatus(senderId, receiverId);
 
         // khi dog y ket ban thi ta them cuoc tro chuyen moi
         Long now = System.currentTimeMillis();
-        String firstMessage = "Các bạn hiện có thể liên lạc với nhau!!";
         ConversationEntity entity = new ConversationEntity();
         entity.setConId(ConversationEntity.genConId(receiverId, senderId));
-        entity.setNameCon(nicknameFriend);
         entity.setUserIdSendReferral(senderId);
         entity.setUserIdReceiveReferral(receiverId);
         entity.setCreatedAt(now);
@@ -50,8 +48,8 @@ public class ReferralService {
         }
     }
 
-    public void rejectReferral(Long senderId, Long receiverId) {
-        referralDao.deleteReferral(senderId, receiverId);
+    public void deleteReferral(Long referralId) {
+        referralDao.deleteReferral(referralId);
     }
 
 }

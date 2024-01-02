@@ -1,4 +1,4 @@
-package com.example.chat_app.models;
+package com.example.chat_app.dtos.response;
 
 import com.example.chat_app.utils.UserStatus;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfoEntity {
+public class UserInfoResponseDto {
     Long userId;
 
     String avatar;
@@ -19,11 +19,15 @@ public class UserInfoEntity {
 
     String dateOfBirth;
 
-    UserStatus status;
+    String status;
 
     String address;
 
     Long createdAt;
 
     Long updatedAt;
+
+    String statusReferral;
+
+    Long referralId;
 }

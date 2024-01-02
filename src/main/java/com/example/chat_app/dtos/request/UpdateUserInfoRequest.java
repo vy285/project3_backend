@@ -7,7 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChangePassRequest {
-    String oldPass;
-    String newPass;
+public class UpdateUserInfoRequest {
+    String nickname;
+
+    String avatar;
+
+    String dateOfBirth;
+
+    String address;
 }

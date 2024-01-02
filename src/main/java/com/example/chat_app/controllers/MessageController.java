@@ -28,13 +28,6 @@ public class MessageController {
     @Autowired
     AuthenticationService authenticationService;
 
-    @PostMapping()
-    public ResponseEntity<ResponseDto<String>> sendMessage(@RequestBody CreateMessageRequest request) {
-        Long senderId = authenticationService.getUserIdFromContext();
-        messageService.createMessage(senderId, request.getReceiverId(), request.getContent(), request.getType());
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Send message successfully"));
-    }
-
     @GetMapping("/mark-read")
     public ResponseEntity<ResponseDto<String>> markRead(@RequestParam("messageId") Long messageId, @RequestParam("conId") String conId) {
         Long receiverId = authenticationService.getUserIdFromContext();

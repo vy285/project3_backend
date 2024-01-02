@@ -47,9 +47,9 @@ public class AccountService implements UserDetailsService {
         return entityOptional.get();
     }
 
-    public void changePassword(String password, Long userId) {
+    public void changePassword(String oldPass, String newPass, Long userId) {
         long now = System.currentTimeMillis();
-        int countChange = accountDao.updatePassword(password, now, userId);
+        int countChange = accountDao.updatePassword(oldPass, newPass, now, userId);
         if (countChange == 0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Change Password Failed");
     }

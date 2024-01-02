@@ -21,14 +21,10 @@ public class MessageImpl implements MessageDao {
     ModelMapper mapper;
 
     @Override
-    public String getLastMessOf(String conId, Long myId) {
+    public MessageEntity getLastMessOf(String conId) {
         Optional<MessagePostgreEntity> postgreEntityOptional = repository.findLastMessBy(conId);
-        if (postgreEntityOptional.isEmpty()) return "Các bạn có thể liên lạc với nhau";
-        MessagePostgreEntity postgreEntity = postgreEntityOptional.get();
-        String personSend = myId == postgreEntity.getSenderId() ? "You: " : "Friend: ";
-        System.out.println("kieu content: " + postgreEntity.getType());
-        String mess = postgreEntity.getType().equals("TEXT") ? postgreEntity.getContent() : "gửi một ảnh";
-        return String.format("%s %s", personSend, mess);
+        if (postgreEntityOptional.isEmpty()) return null;
+        return mapper.map(postgreEntityOptional.get(), MessageEntity.class);
     }
 
     @Override

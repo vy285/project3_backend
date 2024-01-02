@@ -1,5 +1,6 @@
 package com.example.chat_app.daos.interfaces;
 
+import com.example.chat_app.dtos.response.UserInfoResponseDto;
 import com.example.chat_app.models.UserInfoEntity;
 import com.example.chat_app.utils.UserStatus;
 import org.springframework.data.domain.Pageable;
@@ -15,11 +16,11 @@ public interface UserInfoDao {
 
     public long countByNickname(String nickname);
 
-    public List<UserInfoEntity> findPersonAccept (long userId, String nicknameFriend);
+    public List<UserInfoEntity> findBy(String nickname, long myid);
 
-    public List<UserInfoEntity> findPersonWait (long userId, String nicknameFriend);
+    public List<UserInfoResponseDto> findWaitReferral(long myId);
 
-    public List<UserInfoEntity> findPersonNoSend (long userId, String nicknameFriend);
+    public UserInfoEntity findById(long myId);
 
-    public String findAvatarOf(Long userId);
+    public Integer updateUser(UserInfoEntity entity);
 }

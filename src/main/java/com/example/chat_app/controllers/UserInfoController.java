@@ -1,6 +1,9 @@
 package com.example.chat_app.controllers;
 
+import com.example.chat_app.dtos.request.UpdateUserInfoRequest;
+import com.example.chat_app.dtos.response.ProfileResponseDto;
 import com.example.chat_app.dtos.response.ResponseDto;
+import com.example.chat_app.dtos.response.UserInfoResponseDto;
 import com.example.chat_app.models.UserInfoEntity;
 import com.example.chat_app.services.AuthenticationService;
 import com.example.chat_app.services.UserInfoService;
@@ -12,10 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,24 +31,31 @@ public class UserInfoController {
     @Autowired
     UserInfoService userInfoService;
 
-    @GetMapping("/getAcceptRef")
-    public ResponseEntity<ResponseDto<List<UserInfoEntity>>> getPersonAcceptRef(@RequestParam("nickname") String nickname) {
-        long userId = authenticationService.getUserIdFromContext();
-        List<UserInfoEntity> entities = userInfoService.getPersonAcceptRef(userId, nickname);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, entities));
+    @GetMapping("/search")
+    public ResponseEntity<ResponseDto<List<UserInfoResponseDto>>> search(@RequestParam("nickname") String nickname) {
+        long myId = authenticationService.getUserIdFromContext();
+        List<UserInfoResponseDto> dtos = userInfoService.search(myId, nickname);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, dtos));
     }
 
-    @GetMapping("/getWaitRef")
-    public ResponseEntity<ResponseDto<List<UserInfoEntity>>> getPersonWaitRef(@RequestParam("nickname") String nickname) {
-        long userId = authenticationService.getUserIdFromContext();
-        List<UserInfoEntity> entities = userInfoService.getPersonWaitRef(userId, nickname);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, entities));
+    @GetMapping("/waitReferral")
+    public ResponseEntity<ResponseDto<List<UserInfoResponseDto>>> searchWaitReferral() {
+        long myId = authenticationService.getUserIdFromContext();
+        List<UserInfoResponseDto> dtos = userInfoService.searchWaitReferral(myId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, dtos));
     }
 
-    @GetMapping("/getNoRef")
-    public ResponseEntity<ResponseDto<List<UserInfoEntity>>> getPersonNoRef(@RequestParam("nickname") String nickname) {
-        long userId = authenticationService.getUserIdFromContext();
-        List<UserInfoEntity> entities = userInfoService.getPersonNoSend(userId, nickname);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, entities));
+    @GetMapping("")
+    public ResponseEntity<ResponseDto<ProfileResponseDto>> getProfile() {
+        long myId = authenticationService.getUserIdFromContext();
+        ProfileResponseDto dto = userInfoService.getProfile(myId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, dto));
+    }
+
+    @PutMapping("")
+    public ResponseEntity<ResponseDto<String>> updateProfile(@RequestBody UpdateUserInfoRequest request) {
+        long myId = authenticationService.getUserIdFromContext();
+        userInfoService.updateProfile(myId, request.getAvatar(), request.getNickname(), request.getAddress(), request.getDateOfBirth());
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "update thanh cong"));
     }
 }

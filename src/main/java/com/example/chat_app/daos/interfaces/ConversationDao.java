@@ -8,7 +8,9 @@ import java.util.List;
 public interface ConversationDao {
     public void addConversation(ConversationEntity entity);
 
-    public List<ConversationEntity> findConversationRecent(Long userId);
+    public List<ConversationEntity> findConversationRecent(Long myId);
 
     public long totalConversation (Long userId);
+
+    public int updateConversation(String conId, Long now);
 }

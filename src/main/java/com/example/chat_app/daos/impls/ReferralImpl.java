@@ -9,6 +9,10 @@ import jakarta.persistence.PersistenceContext;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.swing.text.html.Option;
+import java.util.Optional;
 
 @Component("referralDao")
 public class ReferralImpl implements ReferralDao {
@@ -22,9 +26,10 @@ public class ReferralImpl implements ReferralDao {
     EntityManager entityManager;
 
     @Override
+    @Transactional
     public void insertReferral(ReferralEntity entity) {
         ReferralPostgreEntity postgreEntity = mapper.map(entity, ReferralPostgreEntity.class);
-        entityManager.persist(postgreEntity);
+        repository.save(postgreEntity);
     }
 
     @Override
@@ -34,7 +39,14 @@ public class ReferralImpl implements ReferralDao {
     }
 
     @Override
-    public void deleteReferral(Long senderId, Long receiverId) {
-        repository.deleteBy(senderId, receiverId);
+    public ReferralEntity statusOfReferral(Long myId, Long otherId) {
+        Optional<ReferralPostgreEntity> postgreEntityOptional = repository.findBy(myId, otherId);
+        if(postgreEntityOptional.isEmpty()) return null;
+        return mapper.map(postgreEntityOptional.get(), ReferralEntity.class);
+    }
+
+    @Override
+    public void deleteReferral(Long referralId) {
+        repository.deleteByReferralId(referralId);
     }
 }

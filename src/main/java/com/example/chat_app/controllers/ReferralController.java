@@ -32,16 +32,16 @@ public class ReferralController {
     }
 
     @GetMapping("/accept")
-    public ResponseEntity<ResponseDto<String>> acceptReferral(@RequestParam("senderId") Long senderId, @RequestParam("nickname") String nickname) {
+    public ResponseEntity<ResponseDto<String>> acceptReferral(@RequestParam("senderId") Long senderId) {
         Long receiverId = authenticationService.getUserIdFromContext();
-        referralService.acceptReferral(senderId, receiverId, nickname);
+        referralService.acceptReferral(senderId, receiverId);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Accept successfully"));
     }
 
-    @GetMapping("/reject")
-    public ResponseEntity<ResponseDto<String>> rejectReferral(@RequestParam("senderId") Long senderId) {
-        Long receiverId = authenticationService.getUserIdFromContext();
-        referralService.rejectReferral(senderId, receiverId);
+    @DeleteMapping("")
+    public ResponseEntity<ResponseDto<String>> deleteReferral(@RequestParam("referralId") Long referralId) {
+        log.info("DeleteReferral " + referralId);
+        referralService.deleteReferral(referralId);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Reject successfully"));
     }
 }

@@ -22,9 +22,9 @@ public class WebsocketController {
     @Autowired
     MessageService messageService;
 
-    @MessageMapping("/chat")
-    public MessageResponseDto processMessage(@Payload CreateMessageRequest request) {
-        log.info("Processing message");
+    @MessageMapping("/message")
+    public void processMessage(@Payload CreateMessageRequest request) {
+        log.info("Processing message " + request.getContent());
         MessageEntity entity = messageService.createMessage(request.getSenderId(), request.getReceiverId(), request.getContent(), request.getType());
         messagingTemplate.convertAndSendToUser(
                 String.valueOf(entity.getReceiverId()), "/queue/messages",
@@ -41,17 +41,17 @@ public class WebsocketController {
                         entity.getUpdatedAt()
                 )
         );
-        return new MessageResponseDto(
-                entity.getMessId(),
-                entity.getConId(),
-                entity.getSenderId(),
-                entity.getReceiverId(),
-                entity.getIsRead(),
-                entity.getContent(),
-                entity.getStatus().toString(),
-                entity.getType().toString(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt()
-        );
+//        return new MessageResponseDto(
+//                entity.getMessId(),
+//                entity.getConId(),
+//                entity.getSenderId(),
+//                entity.getReceiverId(),
+//                entity.getIsRead(),
+//                entity.getContent(),
+//                entity.getStatus().toString(),
+//                entity.getType().toString(),
+//                entity.getCreatedAt(),
+//                entity.getUpdatedAt()
+//        );
     }
 }

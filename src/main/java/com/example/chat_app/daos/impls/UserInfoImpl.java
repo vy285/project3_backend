@@ -2,7 +2,9 @@ package com.example.chat_app.daos.impls;
 
 import com.example.chat_app.daos.impls.repository.UserInfoRepository;
 import com.example.chat_app.daos.interfaces.UserInfoDao;
+import com.example.chat_app.dtos.response.UserInfoResponseDto;
 import com.example.chat_app.models.UserInfoEntity;
+import com.example.chat_app.models.postgresql.ReferralPostgreEntity;
 import com.example.chat_app.models.postgresql.UserInfoPostgreEntity;
 import com.example.chat_app.utils.UserStatus;
 import jakarta.persistence.EntityManager;
@@ -13,9 +15,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component("UserInfoDao")
@@ -67,76 +71,62 @@ public class UserInfoImpl implements UserInfoDao {
         return repository.countBy(nickname);
     }
 
+    //tim nhung nguoi co ten nickname va khac id
+
     @Override
-    public List<UserInfoEntity> findPersonAccept(long userId, String nicknameFriend) {
-        TypedQuery<UserInfoPostgreEntity> query = entityManager.createQuery(
-                "select u from UserInfoPostgreEntity u " +
-                        "where (u.userId in (select r.receiverId from ReferralPostgreEntity r where r.senderId = :userId and r.status = 'yes') " +
-                                "or " +
-                                "u.userId in  (select r.senderId from ReferralPostgreEntity r where r.receiverId = :userId and r.status = 'yes') " +
-                                ") " +
-                        "and (u.nickname = :nicknameFriend)",
-                UserInfoPostgreEntity.class
-        );
-        query.setParameter("nicknameFriend", nicknameFriend);
-        query.setParameter("userId", userId);
-        List<UserInfoPostgreEntity> postgreEntities = query.getResultList();
+    public List<UserInfoEntity> findBy(String nickname, long myId) {
+        List<UserInfoPostgreEntity> postgreEntities = repository.findByNickname(nickname, myId);
         List<UserInfoEntity> entities = new ArrayList<>();
-        for (UserInfoPostgreEntity u : postgreEntities) {
-            UserInfoEntity entity = mapper.map(u, UserInfoEntity.class);
+        for(UserInfoPostgreEntity postgreEntity : postgreEntities) {
+            UserInfoEntity entity = mapper.map(postgreEntity, UserInfoEntity.class);
             entities.add(entity);
         }
         return entities;
     }
 
     @Override
-    public List<UserInfoEntity> findPersonWait(long userId, String nicknameFriend) {
-        TypedQuery<UserInfoPostgreEntity> query = entityManager.createQuery(
-                "select u from UserInfoPostgreEntity u " +
-                        "where (u.userId in (select r.receiverId from ReferralPostgreEntity r where r.senderId = :userId and r.status = 'wait') " +
-                                "or " +
-                                "u.userId in  (select r.senderId from ReferralPostgreEntity r where r.receiverId = :userId and r.status = 'wait') " +
-                                ") " +
-                        "and (u.nickname = :nicknameFriend)",
-                UserInfoPostgreEntity.class
-        );
-        query.setParameter("nicknameFriend", nicknameFriend);
-        query.setParameter("userId", userId);
-        List<UserInfoPostgreEntity> postgreEntities = query.getResultList();
-        List<UserInfoEntity> entities = new ArrayList<>();
-        for (UserInfoPostgreEntity u : postgreEntities) {
-            UserInfoEntity entity = mapper.map(u, UserInfoEntity.class);
-            entities.add(entity);
+    public List<UserInfoResponseDto> findWaitReferral(long myId) {
+        TypedQuery<Object[]> query = entityManager.createQuery(
+                "select u, r " +
+                        "from UserInfoPostgreEntity u join ReferralPostgreEntity r " +
+                        "on r.senderId = u.userId " +
+                        "where r.receiverId =:myId and r.status = 'WAIT'"
+                , Object[].class);
+        query.setParameter("myId", myId);
+        List<Object[]> result = query.getResultList();
+
+        List<UserInfoResponseDto> dtos = new ArrayList<>();
+
+        for (Object[] item : result) {
+            UserInfoPostgreEntity userInfoPostgre = (UserInfoPostgreEntity) item[0];
+            ReferralPostgreEntity referralPostgre = (ReferralPostgreEntity) item[1];
+            UserInfoResponseDto dto = new UserInfoResponseDto();
+            dto.setUserId(userInfoPostgre.getUserId());
+            dto.setStatus(userInfoPostgre.getStatus().toString());
+            dto.setAddress(userInfoPostgre.getAddress());
+            dto.setAvatar(userInfoPostgre.getAvatar());
+            dto.setNickname(userInfoPostgre.getNickname());
+            dto.setDateOfBirth(dto.getDateOfBirth());
+            dto.setCreatedAt(userInfoPostgre.getCreatedAt());
+            dto.setUpdatedAt(userInfoPostgre.getUpdatedAt());
+            dto.setStatusReferral("NORELY");
+            dto.setReferralId(referralPostgre.getReferralId());
+            dtos.add(dto);
         }
-        return entities;
+        return dtos;
     }
 
     @Override
-    public List<UserInfoEntity> findPersonNoSend(long userId, String nicknameFriend) {
-        TypedQuery<UserInfoPostgreEntity> query = entityManager.createQuery(
-                "select u from UserInfoPostgreEntity u " +
-                        "where (u.userId not in (select r.receiverId from ReferralPostgreEntity r where r.senderId = :userId) " +
-                                "and " +
-                                "u.userId not in  (select r.senderId from ReferralPostgreEntity r where r.receiverId = :userId) " +
-                                ") " +
-                        "and (u.nickname = :nicknameFriend) ",
-                UserInfoPostgreEntity.class
-        );
-        query.setParameter("nicknameFriend", nicknameFriend);
-        query.setParameter("userId", userId);
-        List<UserInfoPostgreEntity> postgreEntities = query.getResultList();
-        List<UserInfoEntity> entities = new ArrayList<>();
-        for (UserInfoPostgreEntity u : postgreEntities) {
-            UserInfoEntity entity = mapper.map(u, UserInfoEntity.class);
-            entities.add(entity);
-        }
-        return entities;
-    }
-
-    @Override
-    public String findAvatarOf(Long userId) {
-        Optional<UserInfoPostgreEntity> postgreEntityOptional = repository.findById(userId);
+    public UserInfoEntity findById(long myId) {
+        Optional<UserInfoPostgreEntity> postgreEntityOptional = repository.findById(myId);
         if (postgreEntityOptional.isEmpty()) return null;
-        return postgreEntityOptional.get().getAvatar();
+        return mapper.map(postgreEntityOptional.get(), UserInfoEntity.class);
+    }
+
+    @Override
+    @Transactional
+    public Integer updateUser(UserInfoEntity entity) {
+        UserInfoPostgreEntity postgreEntity = mapper.map(entity, UserInfoPostgreEntity.class);
+        return repository.updateUser(postgreEntity);
     }
 }

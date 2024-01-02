@@ -1,5 +1,6 @@
 package com.example.chat_app.services;
 
+import com.example.chat_app.daos.interfaces.ConversationDao;
 import com.example.chat_app.daos.interfaces.MessageDao;
 import com.example.chat_app.dtos.response.MessageResponseDto;
 import com.example.chat_app.models.ConversationEntity;
@@ -9,6 +10,7 @@ import com.example.chat_app.utils.MessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -19,6 +21,10 @@ public class MessageService {
     @Autowired
     MessageDao messageDao;
 
+    @Autowired
+    ConversationDao conversationDao;
+
+    @Transactional
     public MessageEntity createMessage(long senderId, long receiverId, String content, String type) {
         MessageEntity entity = new MessageEntity();
         Long now = System.currentTimeMillis();
@@ -35,6 +41,7 @@ public class MessageService {
         if (entity == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Create Message failed");
         }
+        conversationDao.updateConversation(ConversationEntity.genConId(senderId, receiverId), now);
         return entity;
     }
 

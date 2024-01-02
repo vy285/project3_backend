@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
 @RequestMapping(path = "conversation")
 @RestController
 @SecurityRequirement(name = "Bearer Authentication")
@@ -35,8 +34,8 @@ public class ConversationController {
     @GetMapping("")
     public ResponseEntity<ResponseDto<List<ConversationResponseDto>>> getLastConversation(
     ) {
-        Long userId = authenticationService.getUserIdFromContext();
-         List<ConversationResponseDto> dtos = conversationService.getConversationRecent(userId);
+        Long myId = authenticationService.getUserIdFromContext();
+         List<ConversationResponseDto> dtos = conversationService.getConversationRecent(myId);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, dtos));
     }
 }

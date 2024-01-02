@@ -38,14 +38,14 @@ public class ConversationImpl implements ConversationDao {
     }
 
     @Override
-    public List<ConversationEntity> findConversationRecent(Long userId) {
+    public List<ConversationEntity> findConversationRecent(Long myId) {
         TypedQuery<ConversationPostgreEntity> query = entityManager.createQuery(
                 "select c from ConversationPostgreEntity  c " +
-                        "where c.userIdSendReferral = :userId or c.userIdReceiveReferral= :userId " +
+                        "where c.userIdSendReferral = :myId or c.userIdReceiveReferral= :myId " +
                         "order by updatedAt desc ",
                     ConversationPostgreEntity.class
                 );
-        query.setParameter("userId", userId);
+        query.setParameter("myId", myId);
         List<ConversationPostgreEntity> postgreEntities =
                 query.getResultList();
 
@@ -60,5 +60,10 @@ public class ConversationImpl implements ConversationDao {
     @Override
     public long totalConversation(Long userId) {
         return repository.countBy(userId);
+    }
+
+    @Override
+    public int updateConversation(String conId, Long now) {
+        return repository.update(conId, now);
     }
 }

@@ -20,9 +20,13 @@ public interface UserInfoRepository extends JpaRepository<UserInfoPostgreEntity,
     @Query(value = "insert into user_info (user_id, nickname, created_at, updated_at) values (:#{#entity.userId}, :#{#entity.nickname}, :#{#entity.createdAt}, :#{#entity.updatedAt})", nativeQuery = true)
     void insertEntity(UserInfoPostgreEntity entity);
 
-    @Query(value = "select * from user_info where nickname = ?1 and status = 'online'", nativeQuery = true)
-    List<UserInfoPostgreEntity> findBy(String nickname);
-
     @Query(value = "select count(*) from user_info where nickname = ?1 and status = 'online'", nativeQuery = true)
     long countBy(String nickname);
+
+    @Query(value = "select * from user_info where nickname=:nickname and user_id != :myId", nativeQuery = true)
+    List<UserInfoPostgreEntity> findByNickname(String nickname, long myId);
+
+    @Modifying
+    @Query(value = "update user_info set nickname=:#{#entity.nickname}, address=:#{#entity.address}, avatar=:#{#entity.avatar}, date_of_birth=:#{#entity.dateOfBirth}, updated_at=:#{#entity.updatedAt} where user_id=:#{#entity.userId} ", nativeQuery = true)
+    Integer updateUser(UserInfoPostgreEntity entity);
 }

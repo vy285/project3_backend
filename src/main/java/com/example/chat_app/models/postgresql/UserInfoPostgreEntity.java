@@ -14,7 +14,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class UserInfoPostgreEntity {
     @Id
     @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
     @Column(name = "avatar")
@@ -26,7 +26,7 @@ public class UserInfoPostgreEntity {
     @Column(name = "date_of_birth")
     private String dateOfBirth;
 
-    @Column(name = "status", columnDefinition = "varchar(255) default 'offline'")
+    @Column(name = "status", columnDefinition = "varchar(255) default 'OFFLINE'")
     private String status;
 
     @Column(name = "address")

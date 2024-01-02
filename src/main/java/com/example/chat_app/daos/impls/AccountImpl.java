@@ -33,8 +33,8 @@ public class AccountImpl implements AccountDao {
     }
 
     @Override
-    public Integer updatePassword(String password, Long updatedAt, Long userId) {
-        return repository.updatePassword(password, updatedAt, userId);
+    public Integer updatePassword(String oldPass, String newPass, Long updatedAt, Long userId) {
+        return repository.updatePassword(oldPass, newPass, updatedAt, userId);
     }
 
     @Override

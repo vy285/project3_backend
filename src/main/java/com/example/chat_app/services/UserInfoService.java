@@ -1,6 +1,9 @@
 package com.example.chat_app.services;
 
 import com.example.chat_app.daos.interfaces.UserInfoDao;
+import com.example.chat_app.dtos.mapper.UserInfoMapper;
+import com.example.chat_app.dtos.response.ProfileResponseDto;
+import com.example.chat_app.dtos.response.UserInfoResponseDto;
 import com.example.chat_app.models.UserInfoEntity;
 import com.example.chat_app.utils.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,9 @@ public class UserInfoService {
     @Autowired
     UserInfoDao userInfoDao;
 
+    @Autowired
+    UserInfoMapper mapper;
+
     public void changeStatus(UserStatus status, Long userId) {
         int count_change = userInfoDao.changeStatus(status, userId);
         if (count_change == 0) {
@@ -38,15 +44,44 @@ public class UserInfoService {
         }
     }
 
-    public List<UserInfoEntity> getPersonAcceptRef(long userId, String nicknameFriend) {
-        return userInfoDao.findPersonAccept(userId, nicknameFriend);
+    public List<UserInfoResponseDto> search(long myId, String nickname) {
+        List<UserInfoEntity> entities = userInfoDao.findBy(nickname, myId);
+        return mapper.getUserInfoResponseDtos(entities, myId);
     }
 
-    public List<UserInfoEntity> getPersonWaitRef(long userId, String nicknameFriend) {
-        return userInfoDao.findPersonWait(userId, nicknameFriend);
+    public List<UserInfoResponseDto> searchWaitReferral(long myId) {
+        return userInfoDao.findWaitReferral(myId);
     }
 
-    public List<UserInfoEntity> getPersonNoSend(long userId, String nicknameFriend) {
-        return userInfoDao.findPersonNoSend(userId, nicknameFriend);
+    public ProfileResponseDto getProfile(long myId) {
+        UserInfoEntity entity = userInfoDao.findById(myId);
+        if (entity == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "token không hợp lệ");
+        }
+        ProfileResponseDto dto = new ProfileResponseDto();
+        dto.setUserId(myId);
+        dto.setAvatar(entity.getAvatar());
+        dto.setAddress(entity.getAddress());
+        dto.setNickname(entity.getNickname());
+        dto.setStatus(entity.getStatus().toString());
+        dto.setDateOfBirth(String.valueOf(entity.getDateOfBirth()));
+        dto.setCreatedAt(entity.getCreatedAt());
+        dto.setUpdatedAt(entity.getUpdatedAt());
+        return dto;
+
+    }
+
+    public void updateProfile(long myId, String avatar, String nickname, String address, String dateOfBirth) {
+        Long now = System.currentTimeMillis();
+        UserInfoEntity entity = new UserInfoEntity();
+        entity.setUserId(myId);
+        entity.setAvatar(avatar);
+        entity.setAddress(address);
+        entity.setNickname(nickname);
+        entity.setDateOfBirth(dateOfBirth);
+        entity.setUpdatedAt(now);
+
+        int countUpdate = userInfoDao.updateUser(entity);
+        if(countUpdate == 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không thể update");
     }
 }

@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 public class ConversationEntity {
     String conId;
 
-    String nameCon;
-
     Long userIdSendReferral; // ai gửi lời kết bạn thì người đó là userId
 
     Long userIdReceiveReferral; // ai g

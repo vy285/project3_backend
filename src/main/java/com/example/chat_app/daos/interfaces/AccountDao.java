@@ -9,7 +9,7 @@ public interface AccountDao {
 
     public Optional<AccountEntity> getByGmail(String gmail);
 
-    public Integer updatePassword(String password, Long updatedAt, Long userId);
+    public Integer updatePassword(String oldPass, String newPass, Long updatedAt, Long userId);
 
     public AccountEntity saveEntity(AccountEntity accountEntity);
 }

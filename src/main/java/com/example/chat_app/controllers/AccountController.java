@@ -34,8 +34,8 @@ public class AccountController {
 
     @PostMapping("/password")
     public ResponseEntity<ResponseDto<String>> changePassword(@RequestBody ChangePassRequest request) {
-        long userid = authenticationService.getUserIdFromContext();
-        accountService.changePassword(request.getNewPass(), userid);
+        long userId = authenticationService.getUserIdFromContext();
+        accountService.changePassword(request.getOldPass(), request.getNewPass(), userId);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Change Password Success"));
     }
 

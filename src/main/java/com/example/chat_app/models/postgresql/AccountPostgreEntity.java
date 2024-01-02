@@ -10,13 +10,11 @@ import org.hibernate.annotations.ColumnDefault;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "account", indexes = {
-        @Index(name = "userId" , columnList = "user_id")
-})
+@Table(name = "account")
 public class AccountPostgreEntity {
     @Id
     @Column(name="user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
     @Column(name="gmail", unique = true)
@@ -34,7 +32,6 @@ public class AccountPostgreEntity {
     @Column(name = "verify_code")
     private String verifyCode;
 
-    @Column(name = "enable")
-    @ColumnDefault("false")
+    @Column(name = "enable", columnDefinition = "varchar(255) default 'false'")
     private boolean enable;
 }

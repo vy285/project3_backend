@@ -6,6 +6,7 @@ import com.example.chat_app.daos.interfaces.UserInfoDao;
 import com.example.chat_app.dtos.mapper.ConversationMapper;
 import com.example.chat_app.dtos.response.ConversationResponseDto;
 import com.example.chat_app.models.ConversationEntity;
+import com.example.chat_app.models.MessageEntity;
 import com.example.chat_app.models.UserInfoEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,8 @@ public class ConversationService {
 
     public void createConversation(Long senderId, Long receiverId, String nicknameFriend) {
         Long now = System.currentTimeMillis();
-        String firstMessage = "Các bạn hiện có thể liên lạc với nhau!!";
         ConversationEntity entity = new ConversationEntity();
         entity.setConId(ConversationEntity.genConId(receiverId, senderId));
-        entity.setNameCon(nicknameFriend);
         entity.setUserIdSendReferral(senderId);
         entity.setUserIdReceiveReferral(receiverId);
         entity.setCreatedAt(now);
@@ -46,18 +45,18 @@ public class ConversationService {
         conversationDao.addConversation(entity);
     }
 
-    public List<ConversationResponseDto> getConversationRecent(Long userId) {
-        List<ConversationEntity> entities = conversationDao.findConversationRecent(userId);
-        List<String> lastMessList = new ArrayList<>();
-        List<String> avatarFriends = new ArrayList<>();
+    public List<ConversationResponseDto> getConversationRecent(Long myId) {
+        List<ConversationEntity> entities = conversationDao.findConversationRecent(myId);
+        List<MessageEntity> lastMessList = new ArrayList<>();
+        List<UserInfoEntity> friendList = new ArrayList<>();
         for (ConversationEntity entity : entities) {
-            String lastMess = messageDao.getLastMessOf(entity.getConId(), userId);
+            MessageEntity lastMess = messageDao.getLastMessOf(entity.getConId());
+            long friendId = myId == entity.getUserIdSendReferral() ? entity.getUserIdReceiveReferral() : entity.getUserIdSendReferral();
+            UserInfoEntity userInfo = userInfoDao.findById(friendId);
             lastMessList.add(lastMess);
-            long friendId = userId == entity.getUserIdReceiveReferral() ? entity.getUserIdSendReferral() : entity.getUserIdReceiveReferral();
-            String avatarFriend = userInfoDao.findAvatarOf(friendId);
-            avatarFriends.add(avatarFriend);
+            friendList.add(userInfo);
         }
-        List<ConversationResponseDto> dtos = conversationMapper.toConversationResponseDtos(entities, lastMessList,avatarFriends);
+        List<ConversationResponseDto> dtos = conversationMapper.toConversationResponseDtos(entities, lastMessList, friendList);
         return dtos;
     }
 }

@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if(accountEntity != null) {
                     System.out.println("Id cua user: " + accountEntity.getUserId());
                     UsernamePasswordAuthenticationToken
-                            authentication = new UsernamePasswordAuthenticationToken(accountEntity, null, accountEntity.getAuthorities());
+                            authentication = new UsernamePasswordAuthenticationToken(accountEntity, accountEntity.getUserId(), accountEntity.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }

@@ -14,7 +14,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class ReferralPostgreEntity {
     @Id
     @Column(name = "referral_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long referralId;
 
     @Column(name = "sender_id")
@@ -23,8 +23,7 @@ public class ReferralPostgreEntity {
     @Column(name = "receiver_id")
     private Long receiverId;
 
-    @Column(name = "status")
-    @ColumnDefault(value = "wait") // neu A chua gui loi ket ban toi B thi se khong co data referral
+    @Column(name = "status", columnDefinition = "varchar(255) default 'WAIT'")
     private String status;
 
     @Column(name = "created_at")
@@ -34,6 +33,6 @@ public class ReferralPostgreEntity {
     private Long updatedAt;
 
     public ReferralPostgreEntity() {
-        this.status = "wait";
+        this.status = "WAIT";
     }
 }

@@ -15,9 +15,6 @@ public class ConversationPostgreEntity {
     @Column(name = "con_id")
     private String conId;
 
-    @Column(name = "name_con")
-    private String nameCon;
-
     @Column(name = "user_id_send_referral")
     private Long userIdSendReferral;
 
