@@ -12,6 +12,7 @@ import com.example.chat_app.models.UserInfoEntity;
 import com.example.chat_app.services.AccountService;
 import com.example.chat_app.services.UserInfoService;
 import com.example.chat_app.utils.UserStatus;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -39,6 +40,7 @@ public class PublicController {
     @Autowired
     private UserInfoService userInfoService;
 
+    @Operation(summary = "Lấy lại mật khẩu" , operationId = "getAgainPass")
     @GetMapping(value = "/forgot-password/{email}")
     public ResponseEntity<ResponseDto<String>> getPassword(@PathVariable(name = "email") String email) {
 //        AccountEntity accountEntity = accountService.getbyGmail(email);
@@ -53,6 +55,7 @@ public class PublicController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Success"));
     }
 
+    @Operation(summary = "Đăng nhập", operationId = "login")
     @PostMapping("/login")
     public ResponseEntity<ResponseDto<LoginResponse>> login(@RequestBody AccountRequest request) {
         AccountEntity entity = accountService.getbyGmail(request.getGmail());
@@ -68,12 +71,13 @@ public class PublicController {
         }
     }
 
+    @Operation(summary = "Đăng ký tài khoản", operationId = "signup")
     @PostMapping("/signup")
     public ResponseEntity<ResponseDto<String>> signup(@RequestBody SignupRequest request) {
         log.info("di vao signup");
         AccountEntity entity = accountService.getbyGmail(request.getGmail());
         if (entity.isEnabled() == true)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Gmail is used before");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Gmail đã được sử dụng");
         String code = entity.getVerifyCode().split("_")[0];
         Long expired = Long.valueOf(entity.getVerifyCode().split("_")[1]);
         Long now = System.currentTimeMillis();
@@ -88,6 +92,7 @@ public class PublicController {
         }
     }
 
+    @Operation(summary = "Gửi code để xác thực đến mail", operationId = "sendVerifyCode")
     @PostMapping("/sendVerifyCode")
     public ResponseEntity<ResponseDto<String>> sendVerifyCode(@RequestBody VerifyCodeRequest request) {
         log.info("VerifyCode");

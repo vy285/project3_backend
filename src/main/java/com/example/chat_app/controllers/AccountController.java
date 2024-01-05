@@ -9,6 +9,7 @@ import com.example.chat_app.services.AccountService;
 import com.example.chat_app.services.AuthenticationService;
 import com.example.chat_app.services.UserInfoService;
 import com.example.chat_app.utils.UserStatus;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ public class AccountController {
     @Autowired
     private AuthenticationService authenticationService;
 
+    @Operation(summary = "Thay đổi mật khẩu", operationId = "changePassword")
     @PostMapping("/password")
     public ResponseEntity<ResponseDto<String>> changePassword(@RequestBody ChangePassRequest request) {
         long userId = authenticationService.getUserIdFromContext();

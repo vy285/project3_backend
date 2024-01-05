@@ -7,6 +7,7 @@ import com.example.chat_app.dtos.response.ResponseDto;
 import com.example.chat_app.models.MessageEntity;
 import com.example.chat_app.services.AuthenticationService;
 import com.example.chat_app.services.MessageService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class MessageController {
     @Autowired
     AuthenticationService authenticationService;
 
+    @Operation(summary = "Đánh dấu tin nhăn đã được đọc", operationId = "markRead")
     @GetMapping("/mark-read")
     public ResponseEntity<ResponseDto<String>> markRead(@RequestParam("messageId") Long messageId, @RequestParam("conId") String conId) {
         Long receiverId = authenticationService.getUserIdFromContext();
@@ -35,6 +37,7 @@ public class MessageController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Mark read"));
     }
 
+    @Operation(summary = "Lấy tin nhắn của cuộc trò chuyện",operationId = "getHistoryConversation")
     @GetMapping("/{conId}")
     public ResponseEntity<ResponseDto<List<MessageResponseDto>>> getHistoryMessage(
             @RequestParam("length") Long length,

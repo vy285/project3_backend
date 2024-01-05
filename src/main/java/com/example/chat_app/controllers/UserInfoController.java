@@ -7,6 +7,7 @@ import com.example.chat_app.dtos.response.UserInfoResponseDto;
 import com.example.chat_app.models.UserInfoEntity;
 import com.example.chat_app.services.AuthenticationService;
 import com.example.chat_app.services.UserInfoService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Max;
@@ -31,6 +32,7 @@ public class UserInfoController {
     @Autowired
     UserInfoService userInfoService;
 
+    @Operation(summary = "Tìm kiếm bằng nick name", operationId = "search")
     @GetMapping("/search")
     public ResponseEntity<ResponseDto<List<UserInfoResponseDto>>> search(@RequestParam("nickname") String nickname) {
         long myId = authenticationService.getUserIdFromContext();
@@ -38,6 +40,7 @@ public class UserInfoController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, dtos));
     }
 
+//    @Operation()
     @GetMapping("/waitReferral")
     public ResponseEntity<ResponseDto<List<UserInfoResponseDto>>> searchWaitReferral() {
         long myId = authenticationService.getUserIdFromContext();

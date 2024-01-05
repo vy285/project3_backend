@@ -6,6 +6,7 @@ import com.example.chat_app.dtos.response.ResponseDto;
 import com.example.chat_app.models.ConversationEntity;
 import com.example.chat_app.services.AuthenticationService;
 import com.example.chat_app.services.ConversationService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Max;
@@ -31,6 +32,7 @@ public class ConversationController {
     @Autowired
     AuthenticationService authenticationService;
 
+    @Operation(summary = "Lấy danh sách cuộc trò chuyện", operationId = "getConversation")
     @GetMapping("")
     public ResponseEntity<ResponseDto<List<ConversationResponseDto>>> getLastConversation(
     ) {

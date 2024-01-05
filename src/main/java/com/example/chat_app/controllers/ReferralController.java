@@ -4,6 +4,7 @@ import com.example.chat_app.dtos.response.ResponseDto;
 import com.example.chat_app.services.AuthenticationService;
 import com.example.chat_app.services.ConversationService;
 import com.example.chat_app.services.ReferralService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ public class ReferralController {
     @Autowired
     ReferralService referralService;
 
+    @Operation(summary = "Gửi lời mời kết bạn", operationId = "sendReferral")
     @GetMapping("")
     public ResponseEntity<ResponseDto<String>> sendReferral(@RequestParam("receiverId") Long receiverId) {
         Long senderId = authenticationService.getUserIdFromContext();
@@ -31,6 +33,7 @@ public class ReferralController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Referral is sent successfully"));
     }
 
+    @Operation(summary = "Chấp nhận lời mởi và bắt đầu trò chuyện", operationId = "acceptReferral")
     @GetMapping("/accept")
     public ResponseEntity<ResponseDto<String>> acceptReferral(@RequestParam("senderId") Long senderId) {
         Long receiverId = authenticationService.getUserIdFromContext();
@@ -38,6 +41,7 @@ public class ReferralController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Accept successfully"));
     }
 
+    @Operation(summary = "Từ chối lời mời", operationId = "deleteReferral")
     @DeleteMapping("")
     public ResponseEntity<ResponseDto<String>> deleteReferral(@RequestParam("referralId") Long referralId) {
         log.info("DeleteReferral " + referralId);
