@@ -56,7 +56,7 @@ public class UserInfoService {
     public ProfileResponseDto getProfile(long myId) {
         UserInfoEntity entity = userInfoDao.findById(myId);
         if (entity == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "token không hợp lệ");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token không hợp lệ");
         }
         ProfileResponseDto dto = new ProfileResponseDto();
         dto.setUserId(myId);
@@ -82,6 +82,6 @@ public class UserInfoService {
         entity.setUpdatedAt(now);
 
         int countUpdate = userInfoDao.updateUser(entity);
-        if(countUpdate == 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không thể update");
+        if(countUpdate == 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không thể cập nhập");
     }
 }

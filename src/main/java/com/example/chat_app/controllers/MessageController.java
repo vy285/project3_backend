@@ -34,7 +34,7 @@ public class MessageController {
     public ResponseEntity<ResponseDto<String>> markRead(@RequestParam("messageId") Long messageId, @RequestParam("conId") String conId) {
         Long receiverId = authenticationService.getUserIdFromContext();
         messageService.markRead(receiverId, conId, messageId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Mark read"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Đánh dấu đã đọc thành công"));
     }
 
     @Operation(summary = "Lấy tin nhắn của cuộc trò chuyện",operationId = "getHistoryConversation")

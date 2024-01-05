@@ -59,6 +59,6 @@ public class UserInfoController {
     public ResponseEntity<ResponseDto<String>> updateProfile(@RequestBody UpdateUserInfoRequest request) {
         long myId = authenticationService.getUserIdFromContext();
         userInfoService.updateProfile(myId, request.getAvatar(), request.getNickname(), request.getAddress(), request.getDateOfBirth());
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "update thanh cong"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Cập nhập thành công"));
     }
 }

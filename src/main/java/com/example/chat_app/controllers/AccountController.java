@@ -38,7 +38,7 @@ public class AccountController {
     public ResponseEntity<ResponseDto<String>> changePassword(@RequestBody ChangePassRequest request) {
         long userId = authenticationService.getUserIdFromContext();
         accountService.changePassword(request.getOldPass(), request.getNewPass(), userId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Change Password Success"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Thay đổi mật khẩu thành công"));
     }
 
 }

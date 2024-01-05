@@ -43,16 +43,16 @@ public class PublicController {
     @Operation(summary = "Lấy lại mật khẩu" , operationId = "getAgainPass")
     @GetMapping(value = "/forgot-password/{email}")
     public ResponseEntity<ResponseDto<String>> getPassword(@PathVariable(name = "email") String email) {
-//        AccountEntity accountEntity = accountService.getbyGmail(email);
+        AccountEntity accountEntity = accountService.getbyGmail(email);
         log.info("email: " + email);
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("vykroos285@gmail.com");
         message.setTo(email);
         message.setSubject("Get Password");
-//        message.setText("Yourpassword is: " + accountEntity.getPassword());
-        message.setText("lay lai mk");
+        message.setText("Yourpassword is: " + accountEntity.getPassword());
+//        message.setText("Lấy lại mật khẩu");
         javaMailSender.send(message);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Success"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Đã gửi lại mật khẩu"));
     }
 
     @Operation(summary = "Đăng nhập", operationId = "login")
@@ -67,7 +67,7 @@ public class PublicController {
             userInfoService.changeStatus(UserStatus.ONLINE, entity.getUserId());
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, response));
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password incorrect");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mật khẩu không đúng");
         }
     }
 
@@ -86,9 +86,9 @@ public class PublicController {
             entity.setEnable(true);
             entity.setVerifyCode(null);
             accountService.verifySuccess(entity, request.getNickname());
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Signup successfully"));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Đăng ký thành công"));
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "VerifyCode not true");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mã xác thực không đúng");
         }
     }
 
@@ -97,7 +97,7 @@ public class PublicController {
     public ResponseEntity<ResponseDto<String>> sendVerifyCode(@RequestBody VerifyCodeRequest request) {
         log.info("VerifyCode");
         accountService.saveVerifyCode(request.getGmail());
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Create verifyCode successfully"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Tạo mã thực thành công"));
     }
 
     @GetMapping("/searchUser")

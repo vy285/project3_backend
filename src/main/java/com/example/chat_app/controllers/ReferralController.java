@@ -30,7 +30,7 @@ public class ReferralController {
     public ResponseEntity<ResponseDto<String>> sendReferral(@RequestParam("receiverId") Long receiverId) {
         Long senderId = authenticationService.getUserIdFromContext();
         referralService.addReferral(senderId, receiverId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Referral is sent successfully"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Lời mời đã được gửi"));
     }
 
     @Operation(summary = "Chấp nhận lời mởi và bắt đầu trò chuyện", operationId = "acceptReferral")
@@ -38,7 +38,7 @@ public class ReferralController {
     public ResponseEntity<ResponseDto<String>> acceptReferral(@RequestParam("senderId") Long senderId) {
         Long receiverId = authenticationService.getUserIdFromContext();
         referralService.acceptReferral(senderId, receiverId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Accept successfully"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Đã chấp nhận lời mời"));
     }
 
     @Operation(summary = "Từ chối lời mời", operationId = "deleteReferral")
@@ -46,6 +46,6 @@ public class ReferralController {
     public ResponseEntity<ResponseDto<String>> deleteReferral(@RequestParam("referralId") Long referralId) {
         log.info("DeleteReferral " + referralId);
         referralService.deleteReferral(referralId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Reject successfully"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>(200, "Đã từ chối lời mời"));
     }
 }

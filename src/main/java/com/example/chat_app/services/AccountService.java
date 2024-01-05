@@ -42,7 +42,7 @@ public class AccountService implements UserDetailsService {
     public AccountEntity getbyGmail(String gmail) {
         Optional<AccountEntity> entityOptional = accountDao.getByGmail(gmail);
         if (entityOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find account");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không thể tìm thấy tài khoản");
         }
         return entityOptional.get();
     }
@@ -51,7 +51,7 @@ public class AccountService implements UserDetailsService {
         long now = System.currentTimeMillis();
         int countChange = accountDao.updatePassword(oldPass, newPass, now, userId);
         if (countChange == 0)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Change Password Failed");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Thay đổi mật khẩu thất bại");
     }
 
     @Transactional
@@ -96,7 +96,7 @@ public class AccountService implements UserDetailsService {
 
     public void saveVerifyCode(String gmail) {
         log.info("gmail: " + gmail);
-        if (checkGmail(gmail) == false) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Gmail is not correct");
+        if (checkGmail(gmail) == false) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Gmail không đúng định dạng");
         String code = generateRandomNumberString(6);
         Long expired = System.currentTimeMillis() + 5 * 60 * 10000;
         String verifyCode = String.format("%s_%s", code, expired);
@@ -105,7 +105,7 @@ public class AccountService implements UserDetailsService {
         if (entityOptional.isEmpty()) {
             newEntity.setGmail(gmail);
         } else {
-            if (entityOptional.get().isEnabled() == true) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Gmail exist");
+            if (entityOptional.get().isEnabled() == true) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Gmail đã tồn tại");
             newEntity = entityOptional.get();
         }
         emailService.sendEmail(gmail, "VerifyCode", code);

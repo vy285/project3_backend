@@ -39,7 +39,7 @@ public class MessageService {
         entity.setUpdatedAt(now);
         entity = messageDao.addMessage(entity);
         if (entity == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Create Message failed");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tạo tin nhắn thất bại");
         }
         conversationDao.updateConversation(ConversationEntity.genConId(senderId, receiverId), now);
         return entity;

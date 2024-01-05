@@ -44,7 +44,7 @@ public class ReferralService {
         entity.setUpdatedAt(now);
         conversationDao.addConversation(entity);
         if (countUpdate != 1) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Accept failed");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chấp nhận thất bại");
         }
     }
 
